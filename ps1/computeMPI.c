@@ -27,21 +27,21 @@ double compute_part(int local_start, int local_end) {
 
 int main(int argc, char **argv) {
 	int     my_rank; /* My process rank */
-    int     size; /* The number of processes */ 
+	int     size; /* The number of processes */ 
 	int 	range_per_process; /* The range to computate per process */
 	int 	local_start, local_end; /* Start and end for the local computations */
 	double 	part_sum; /* Used as a receive buffer for MPI_Send and MPI_Recv */
 	double 	total = 0.0; /* The total sum of all computations */
-   	MPI_Status status;
+	MPI_Status status;
 
     /* Give the system the initation for MPI */ 
-    MPI_Init(&argc, &argv);
+	MPI_Init(&argc, &argv);
     
     /* Get the my process rank */
-    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
     /* Get the number of processes in use by the system */
-    MPI_Comm_size(MPI_COMM_WORLD, &size);
+	MPI_Comm_size(MPI_COMM_WORLD, &size);
 
 	if (argc < 3) {
 		printf("This program requires two parameters:\n \
@@ -85,6 +85,7 @@ start is 2 or greater, and end is greater than start.\n");
 	}
     
 	// TODO: Print the global sum once only
+	// We only want to print if it is the master process
 	if (my_rank == MASTER) {
 		printf("The sum is: %f\n", total);
 	}
