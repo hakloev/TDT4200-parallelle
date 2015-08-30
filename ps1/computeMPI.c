@@ -73,11 +73,11 @@ start is 2 or greater, and end is greater than start.\n");
 	// Use MPI_Send and MPI_Recv here
    	if (my_rank != MASTER) {
 		//printf("Sending part_sum (%f) from process %d\n", part_sum, my_rank);
-        MPI_Send(&part_sum, 1, MPI_DOUBLE, MASTER, RETURN_DATA_TAG, MPI_COMM_WORLD);
+		MPI_Send(&part_sum, 1, MPI_DOUBLE, MASTER, RETURN_DATA_TAG, MPI_COMM_WORLD);
     } else {  // This is the master process, so here we recieve all the local computations
 		total = part_sum;
 		for (int i = 1; i < size; i++) {
-            MPI_Recv(&part_sum, 1, MPI_DOUBLE, i, RETURN_DATA_TAG, MPI_COMM_WORLD, &status);
+			MPI_Recv(&part_sum, 1, MPI_DOUBLE, i, RETURN_DATA_TAG, MPI_COMM_WORLD, &status);
 			total = total + part_sum;
 			//printf("Received part_sum (%f) from process %d\n", part_sum, i);
         }
