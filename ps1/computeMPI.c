@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
 	int 	local_start, local_end; /* Start and end for the local computations */
 	double 	part_sum; /* Used as a receive buffer for MPI_Send and MPI_Recv */
 	double 	total = 0.0; /* The total sum of all computations */
-	MPI_Status status;
+	MPI_Status status; 
 
     /* Give the system the initation for MPI */ 
 	MPI_Init(&argc, &argv);
@@ -65,7 +65,6 @@ start is 2 or greater, and end is greater than start.\n");
 
 	// If (stop - start) % size != 0 we have to change the local_end for the last process
 	local_end = (local_end > stop) ? stop : local_end;
-
 	part_sum = compute_part(local_start, local_end); 
 
 	// Debug prints if needed
@@ -75,7 +74,7 @@ start is 2 or greater, and end is greater than start.\n");
    	if (my_rank != MASTER) {
 		//printf("Sending part_sum (%f) from process %d\n", part_sum, my_rank);
         MPI_Send(&part_sum, 1, MPI_DOUBLE, MASTER, RETURN_DATA_TAG, MPI_COMM_WORLD);
-    } else {  // This is the master process, so here we recieve all the local computation
+    } else {  // This is the master process, so here we recieve all the local computations
 		total = part_sum;
 		for (int i = 1; i < size; i++) {
             MPI_Recv(&part_sum, 1, MPI_DOUBLE, i, RETURN_DATA_TAG, MPI_COMM_WORLD, &status);
