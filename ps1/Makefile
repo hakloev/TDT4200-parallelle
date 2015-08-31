@@ -1,7 +1,11 @@
 .PHONY: clean all 
 
+CXX=icpc
+CC=icc
+FC=ifort
+
 START:=2
-STOP:=10000000
+STOP:=100000000
 PROCESSES:=4
 
 all: parallel serial
@@ -13,7 +17,7 @@ run_parallel: parallel
 	mpirun -np $(PROCESSES) ./parallel $(START) $(STOP) 
 
 serial: computeSerial.c
-	gcc -o $@ computeSerial.c -std=c99 -lm -O2
+	$(CC) -o $@ computeSerial.c -std=c99 -lm -O2
 
 run_serial: serial
 	./serial $(START) $(STOP)
