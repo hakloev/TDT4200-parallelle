@@ -7,10 +7,10 @@ PROCESSES:=4
 all: parallel serial
 
 parallel: computeMPI.c
-	mpicc -g -Wall -o parallel computeMPI.c -std=c99 -lm -O2
+	mpicc -g -Wall -o parallel computeMPI.c -std=c99 -lm
 
 run_parallel: parallel
-	mpirun -n $(PROCESSES) ./parallel $(START) $(STOP) 
+	mpirun -np $(PROCESSES) ./parallel $(START) $(STOP) 
 
 serial: computeSerial.c
 	gcc -o $@ computeSerial.c -std=c99 -lm -O2

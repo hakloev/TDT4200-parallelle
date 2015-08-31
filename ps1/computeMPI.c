@@ -32,6 +32,7 @@ int main(int argc, char **argv) {
 	int 	local_start, local_end; /* Start and end for the local computations */
 	double 	part_sum; /* Used as a receive buffer for MPI_Send and MPI_Recv */
 	double 	total = 0.0; /* The total sum of all computations */
+	double 	local_start_time, local_end_time, local_elapsed_time, elapsed_time;
 	MPI_Status status; 
 
     /* Give the system the initation for MPI */ 
@@ -42,6 +43,7 @@ int main(int argc, char **argv) {
 
     /* Get the number of processes in use by the system */
 	MPI_Comm_size(MPI_COMM_WORLD, &size);
+	/* From this point, all processes run a instance of the program */
 
 	if (argc < 3) {
 		printf("This program requires two parameters:\n \
@@ -58,6 +60,9 @@ start is 2 or greater, and end is greater than start.\n");
 		exit(1);
 	}
 
+	MPI_Barrier(MPI_COMM_WORLD); /* Synchronize processes */
+	local_start_time = MPI_Wtime();
+
 	// TODO: Compute the local range, so that all the elements are accounted for.
 	range_per_process = ceil(((double)(stop - start) / size)); /* Calculate the ranger per process */
 	local_start = (start + my_rank * range_per_process); /* Set local start */
@@ -66,11 +71,17 @@ start is 2 or greater, and end is greater than start.\n");
 	// If (stop - start) % size != 0 we have to change the local_end for the last process
 	local_end = (local_end > stop) ? stop : local_end;
 	part_sum = compute_part(local_start, local_end); 
+	
+	MPI_Barrier(MPI_COMM_WORLD);
+	local_end_time = MPI_Wtime();
+	local_elapsed_time = local_end_time - local_start_time;
+	MPI_Reduce(&local_elapsed_time, &elapsed_time, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
 	// Debug prints if needed
     
 	// TODO: Get the sum of each node's partial answer
 	// Use MPI_Send and MPI_Recv here
+	// Could also use MPI_Reduce and achieve the same result
    	if (my_rank != MASTER) {
 		//printf("Sending part_sum (%f) from process %d\n", part_sum, my_rank);
 		MPI_Send(&part_sum, 1, MPI_DOUBLE, MASTER, RETURN_DATA_TAG, MPI_COMM_WORLD);
@@ -87,6 +98,7 @@ start is 2 or greater, and end is greater than start.\n");
 	// We only want to print if it is the master process
 	if (my_rank == MASTER) {
 		printf("The sum is: %f\n", total);
+		printf("Elapsed time: %f seconds\n", elapsed_time);
 	}
 
     MPI_Finalize();
