@@ -12,7 +12,7 @@ do
 		do
 			end=$(($increment * i))
 			read TIME <<< $(./parallel 2 $end)
-			echo "$proc, $end, ${TIME}" >> result.txt
+			echo "$proc,$interval,$end,${TIME}" >> result.txt
 		done
 	done
 done

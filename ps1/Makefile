@@ -1,8 +1,8 @@
 .PHONY: clean all 
 
-CXX=icpc
-CC=icc
-FC=ifort
+#CXX=icpc
+#CC=icc
+#FC=ifort
 
 START:=2
 STOP:=100000000
