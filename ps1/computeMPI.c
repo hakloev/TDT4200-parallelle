@@ -97,9 +97,9 @@ start is 2 or greater, and end is greater than start.\n");
 	// TODO: Print the global sum once only
 	// We only want to print if it is the master process
 	if (my_rank == MASTER) {
-		//printf("The sum is: %f\n", total);
+		printf("The sum is: %f\n", total);
 		//printf("Elapsed time: %f seconds\n", elapsed_time);
-		printf("%f\n", elapsed_time);
+		//printf("%f\n", elapsed_time);
 	}
 
     MPI_Finalize();
