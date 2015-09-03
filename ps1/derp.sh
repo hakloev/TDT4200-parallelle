@@ -11,7 +11,7 @@ do
 		for i in {1..20}
 		do
 			end=$(($increment * i))
-			read TIME <<< $(./parallel 2 $end)
+        	read TIME <<< $(mpirun -np $proc ./parallel 2 $end)
 			echo "$proc,$interval,$end,${TIME}" >> result.txt
 		done
 	done
