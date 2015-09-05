@@ -8,7 +8,7 @@ START:=2
 STOP:=100000000
 PROCESSES:=4
 
-all: parallel serial
+all: parallel 
 
 parallel: computeMPI.c
 	mpicc -g -Wall -o parallel computeMPI.c -std=c99 -lm
